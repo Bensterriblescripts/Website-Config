@@ -1,0 +1,26 @@
+{
+    "window.commandCenter": true,
+    "git.openRepositoryInParentFolders": "never",
+    "editor.fontFamily": "\"FiraCode Nerd Font\"",
+    "terminal.integrated.fontFamily": "monospace",
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.preferredDarkColorTheme": "Default Dark Modern",
+    "workbench.colorCustomizations": {
+        "[Default Dark Modern]": {
+            "editor.background": "#1A1A1A"
+        }
+    },
+    "editor.fontSize": 13,
+    "workbench.cloudChanges.autoResume": "off",
+    "workbench.cloudChanges.continueOn": "off",
+    "workbench.hover.delay": 100,
+    "terminal.integrated.persistentSessionReviveProcess": "never",
+    "files.hotExit": "off",
+    "window.restoreWindows": "none",
+    "workbench.editor.restoreViewState": false,
+    "files.restoreUndoStack": false,
+    "workbench.localHistory.enabled": false,
+    "terminal.integrated.enablePersistentSessions": false,
+    "explorer.confirmDelete": false,
+    "terminal.integrated.environmentChangesRelaunch": false
+}

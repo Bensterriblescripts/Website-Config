@@ -19,9 +19,7 @@ func ServePage(w http.ResponseWriter, filename string) {
 	}
 }
 func LoadFilesIntoCache() {
-	dir := PanicErr(filepath.Abs("static")) // Serve all files in this directory
-	fmt.Printf("Base directory: %s\n", dir)
-
+	dir := PanicErr(filepath.Abs("static"))
 	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -52,4 +50,8 @@ func CachedFileHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		http.NotFound(w, r)
 	}
+}
+func GetCachedFile(filename string) ([]byte, bool) {
+	content, exists := fileCache[filename]
+	return content, exists
 }

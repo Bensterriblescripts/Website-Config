@@ -1,1 +1,193 @@
-Hello!
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Setup</title>
+    </head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #3a3939;
+            color: white;
+            line-height: 1.6;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            color: #678eb6;
+            background-color: #474646;
+            padding: 15px;
+            margin: 0;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
+        }
+        h3 {
+            color: #678eb6;
+            background-color: #474646;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
+            width: 200px;
+            margin: 0 auto;
+            user-select: none;
+            cursor: pointer;
+        }
+        h3:hover {
+            background-color: #615f5f;
+        }
+        p {
+            color: #678eb6;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        li {
+            background-color: #474646;
+            padding: 15px;
+            margin: 0;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            width: 200px;
+        }
+        li:hover {
+            background-color: #3a3939;
+        }
+    </style>
+    <body>
+        <h1>Configuration and Setup</h1>
+        <p>List of all the common configuration files, scripts, and executables.</p>
+        <br>
+
+        <h3 style="display: inline-block;" onclick="showSection('config')">Configuration</h3>
+        <h3 style="display: inline-block;" onclick="showSection('executable')">Executables</h3>
+        <h3 style="display: inline-block;" onclick="showSection('adminscript')">Admin Scripts</h3>
+        <h3 style="display: inline-block;" onclick="showSection('userscript')">User Scripts</h3>
+
+        <ul id="downloadlist"></ul>
+    </body>
+
+    <script>
+        const configs = [
+            ["cursor.json", "Cursor"],
+            ["WowClassic.zip", "WoW Classic"]
+        ];
+        const executables = [
+            ["code.exe", "VS Code"], // Added Manually
+            ["cursor.exe", "Cursor"], // Added Manually
+            ["SteamSetup.exe", "Steam"],
+            ["VisualStudioSetup.exe", "Visual Studio Community"]
+        ];
+        const adminScripts = [
+            ["DisableBackgroundApplications.ps1", "Disable Background Apps"],
+            ["RemoveGallery.cmd", "Remove Gallery"],
+            ["RemoveHome.cmd", "Remove Home"],
+            ["HibernationOff.ps1", "Disable Hibernation"],
+            ["RemoveContextMenus.ps1", "Remove Context Menus"]
+        ];
+        const userScripts = [
+            ["DisableWindowsSearch.ps1", "Disable Windows Search"],
+            ["RestoreOldContextMenu.ps1", "Restore Old Context Menu"],
+            ["TaskbarAlignLeft.ps1", "Align Taskbar to Left"]
+        ];
+
+        let selectedSection = null;
+        async function showSection(section) {
+            const downloadlist = document.getElementById('downloadlist');
+            if (selectedSection === section) {
+                downloadlist.style.display = 'none';
+                downloadlist.innerHTML = '';
+                selectedSection = null;
+                return;
+            }
+
+            if (selectedSection !== null) {
+                downloadlist.style.display = 'none';
+                downloadlist.innerHTML = '';
+            }
+            downloadlist.style.display = 'flex';
+            selectedSection = section;
+
+            if (section === 'config') {
+                for (const config of configs) {
+                    const li = document.createElement('li');
+                    li.textContent = config[1];
+                    li.onclick = () => requestFile(config[0], section);
+                    downloadlist.appendChild(li);
+                }
+            }
+            else if (section === 'executable') {
+                for (const executable of executables) {
+                    const li = document.createElement('li');
+                    li.textContent = executable[1];
+                    li.onclick = () => requestFile(executable[0], section);
+                    downloadlist.appendChild(li);
+                }
+            }
+            else if (section === 'adminscript') {
+                for (const script of adminScripts) {
+                    const li = document.createElement('li');
+                    li.textContent = script[1];
+                    li.onclick = () => requestFile(script[0], section);
+                    downloadlist.appendChild(li);
+                }
+            }
+            else if (section === 'userscript') {
+                for (const script of userScripts) {
+                    const li = document.createElement('li');
+                    li.textContent = script[1];
+                    li.onclick = () => requestFile(script[0], section);
+                    downloadlist.appendChild(li);
+                }
+            }
+            else {
+                console.log("Invalid section: " + section);
+                return;
+            }
+        }
+        async function requestFile(filename, filetype) {
+            try {
+                let body = JSON.stringify({
+                    [filetype]: filename
+                });
+
+                const response = await fetch(window.location.origin + '/files', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: body
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                return "Download initiated for " + filename;
+            } 
+            catch (error) {
+                console.error('Exception Error: ' + error);
+                return "Exception: " + error;
+            }
+        }
+    </script>
+</html>
