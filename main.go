@@ -72,6 +72,7 @@ func handlerConfig(w http.ResponseWriter, r *http.Request) {
 			w.Write(content)
 			return
 		} else {
+			fmt.Println("File not found")
 			http.Error(w, "File not found", http.StatusNotFound)
 			return
 		}
@@ -84,6 +85,7 @@ func handlerConfig(w http.ResponseWriter, r *http.Request) {
 			w.Write(content)
 			return
 		} else {
+			fmt.Println("File not found")
 			http.Error(w, "File not found", http.StatusNotFound)
 			return
 		}
@@ -95,6 +97,10 @@ func handlerConfig(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/octet-stream")
 			w.Write(content)
 			return
+		} else {
+			fmt.Println("File not found")
+			http.Error(w, "File not found", http.StatusNotFound)
+			return
 		}
 	} else if configFile, exists := data["userscript"]; exists {
 		fmt.Printf("Requested Script: %v\n", configFile)
@@ -103,6 +109,10 @@ func handlerConfig(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", configFile))
 			w.Header().Set("Content-Type", "application/octet-stream")
 			w.Write(content)
+			return
+		} else {
+			fmt.Println("File not found")
+			http.Error(w, "File not found", http.StatusNotFound)
 			return
 		}
 	} else {
